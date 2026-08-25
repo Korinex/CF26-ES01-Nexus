@@ -1,248 +1,264 @@
-<<<<<<< Updated upstream
-# 🌍 Problem Statement & Solution Overview
-## Team Name: NEXUS
+# 🌱 EcoProof
 
-## 🔍 The Problem
+**Tamper-evident, cryptographically verifiable provenance for environmental claims.**
 
-Every year, companies publish thousands of environmental claims like carbon emissions cut by 20%, renewable energy sourced at 80%, sustainability targets hit ahead of schedule. These numbers move from spreadsheets to consultants to sustainability reports to public disclosures, passing through many hands along the way.
-
-By the time a claim reaches a regulator, an investor, or the public, three simple questions become surprisingly hard to answer:
-
-- 📍 **Where did this number actually come from?**
-- ✏️ **Has it been quietly changed since it was first recorded?**
-- ⚖️ **If two organizations report different numbers for the same thing, which one is right — or is neither?**
-
-Right now, the honest answer to all three is: **you have to trust the organization's word for it.** There's no cryptographic proof behind the number, no independent way to check it, and no visible history if it was edited.
-
-## 🧠 What We Learned Looking at How Others Solved This
-
-🔐 **Certificate Transparency.** A compromised Certificate Authority once secretly issued fraudulent certificates for major domains including Google and Yahoo, and because there was no centralized monitoring system, the breach went undetected for weeks [1]. The industry's fix, in place since 2013: certificates are logged in public, append-only, cryptographically-assured ledgers built on Merkle trees, making it cryptographically impossible to remove or alter a logged entry without detection [2]. Importantly, the system's own documentation is explicit that it cannot prevent a bad certificate from being issued , it only makes misissuance detectable quickly once it happens [3].
-
-🌱 **Blockchain-based carbon accounting.** The Climate Action Data Trust — a permissioned ledger launched by the World Bank, the International Emissions Trading Association, and the Government of Singapore , assigns unique identifiers to carbon credits so there is only ever one authoritative record of a credit's status, preventing double-counting across registries [4]. Industry analysis of blockchain applications in ESG reporting is candid about the same boundary we found in Certificate Transparency: the technology preserves an audit trail once data is recorded, but it does not guarantee the underlying measurement was accurate to begin with [5].
-
-📚 **Academic provenance research.** Existing work on data provenance systems notes that most solutions focus on reducing performance overhead and improving query flexibility, while giving little attention to whether the provenance record itself could be fabricated or falsified [6].
-
-## 💡 Our Approach
-
-🔗 Think of it like a notebook where every page is glued to the page before it. Change one page, and the glue breaks — visibly, for anyone checking.
-
-1. 🧾 **Approved identity first** — organizations are independently attested before they can anchor any claim.
-2. ✍️ **Cryptographic signing + hash-chaining** — every claim is hashed, linked to its predecessor, and signed.
-3. 🕵️ **Independent, multi-node verification** — three separate processes check the chain over real HTTP and compare results, reporting disagreement honestly rather than hiding a failure.
-4. ⚠️ **Typed conflict detection** — differing claims are compared with real percentage/categorical logic, not a placeholder, and both versions stay queryable.
-
-## 🎯 Our Claim
-
-> A hash-chained, cryptographically-signed evidence ledger with independent multi-node verification can detect tampering and data conflicts in environmental claims as reliably as a centralized system — without requiring anyone to trust a single central authority.
-
-🛑 We are **not** claiming this proves an environmental measurement is scientifically true — only that once recorded, tampering with it becomes detectable, consistent with the same scope boundary drawn by existing blockchain-ESG research [5].
-
-## 🌟 Why It Matters
-
-If this claim holds, accountability shifts from "trust our word" to "here is math you can independently verify" , a modest, provable foundation for audits and regulators to build on.
+**Team:** NEXUS
+**Problem Code:** E-01 — Decentralized Environmental Data Provenance Network
 
 ---
 
-## Reference List 
+## 📋 Table of Contents
 
-1. Certificate Transparency Logs: Complete Analysis for Security Professionals — subdomains.dbuidl.com
-2. What is Certificate Transparency? — SSL Insights, sslinsights.com
-3. What Is Certificate Transparency and How Does It Work? — RapidSSLOnline
-4. Blockchain for Environmental Tracking: How Distributed Ledgers Verify Carbon Credits and ESG Data — mychores.in
-5. Why Blockchain Works for ESG and Sustainability Reporting — Blockchain Council
-6. SciChain: Trustworthy Scientific Data Provenance — Al-Mamun & Zhao, arXiv:2002.00141
-=======
-# EcoProof
+- [🧩 Problem & Solution](#-problem--solution)
+- [🏗️ Architecture / Workflow](#️-architecture--workflow)
+- [🔐 Core Technical Mechanism](#-core-technical-mechanism)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [⚙️ Setup & Installation](#️-setup--installation)
+- [▶️ Usage](#️-usage)
+- [📊 Validation & Results](#-validation--results)
+- [⚠️ Limitations & Future Scope](#️-limitations--future-scope)
+- [🌍 Stakeholders](#-stakeholders)
+- [👥 Team](#-team)
+- [🤖 AI Assistance Disclosure](#-ai-assistance-disclosure)
+- [📄 License](#-license)
+- [📚 References](#-references)
 
-EcoProof is a hackathon prototype for making environmental claims inspectable. It combines an approved organization identity, signed and versioned evidence, typed conflict comparison, independent HTTP verification, and a visible audit trail.
+---
 
-The prototype is intentionally small and demonstrable. It does not claim that an environmental statement is scientifically true. It proves the integrity, authorship, history, and independent verification of the bytes that were anchored.
+## 🧩 Problem & Solution
 
-## Exact project structure
+**The problem:** Companies publish claims like "cut emissions 20%" — but nobody outside can check where the number came from, if it was quietly edited later, or which version is right when two orgs disagree.
 
-```text
-EcoProof-final/
-├── backend/
-│   ├── scripts/
-│   │   ├── demo.ts
-│   │   ├── judge-demo.mjs
-│   │   └── smoke-test.mjs
-│   └── src/
-│       └── index.ts
-├── frontend/
-│   ├── public/
-│   │   └── .gitkeep
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── ErrorBoundary.tsx
-│   │   │   ├── ManusDialog.tsx
-│   │   │   └── ui/
-│   │   │       ├── accordion.tsx
-│   │   │       ├── alert-dialog.tsx
-│   │   │       ├── alert.tsx
-│   │   │       ├── aspect-ratio.tsx
-│   │   │       ├── avatar.tsx
-│   │   │       ├── badge.tsx
-│   │   │       ├── breadcrumb.tsx
-│   │   │       ├── button-group.tsx
-│   │   │       ├── button.tsx
-│   │   │       ├── calendar.tsx
-│   │   │       ├── card.tsx
-│   │   │       ├── carousel.tsx
-│   │   │       ├── chart.tsx
-│   │   │       ├── checkbox.tsx
-│   │   │       ├── collapsible.tsx
-│   │   │       ├── command.tsx
-│   │   │       ├── context-menu.tsx
-│   │   │       ├── dialog.tsx
-│   │   │       ├── drawer.tsx
-│   │   │       ├── dropdown-menu.tsx
-│   │   │       ├── empty.tsx
-│   │   │       ├── field.tsx
-│   │   │       ├── form.tsx
-│   │   │       ├── hover-card.tsx
-│   │   │       ├── input-group.tsx
-│   │   │       ├── input-otp.tsx
-│   │   │       ├── input.tsx
-│   │   │       ├── item.tsx
-│   │   │       ├── kbd.tsx
-│   │   │       ├── label.tsx
-│   │   │       ├── menubar.tsx
-│   │   │       ├── navigation-menu.tsx
-│   │   │       ├── pagination.tsx
-│   │   │       ├── popover.tsx
-│   │   │       ├── progress.tsx
-│   │   │       ├── radio-group.tsx
-│   │   │       ├── resizable.tsx
-│   │   │       ├── scroll-area.tsx
-│   │   │       ├── select.tsx
-│   │   │       ├── separator.tsx
-│   │   │       ├── sheet.tsx
-│   │   │       ├── sidebar.tsx
-│   │   │       ├── skeleton.tsx
-│   │   │       ├── slider.tsx
-│   │   │       ├── sonner.tsx
-│   │   │       ├── spinner.tsx
-│   │   │       ├── switch.tsx
-│   │   │       ├── table.tsx
-│   │   │       ├── tabs.tsx
-│   │   │       ├── textarea.tsx
-│   │   │       ├── toggle-group.tsx
-│   │   │       ├── toggle.tsx
-│   │   │       └── tooltip.tsx
-│   │   ├── contexts/
-│   │   │   └── ThemeContext.tsx
-│   │   ├── hooks/
-│   │   │   ├── useComposition.ts
-│   │   │   ├── useMobile.tsx
-│   │   │   └── usePersistFn.ts
-│   │   ├── lib/
-│   │   │   ├── ecoproof-api.ts
-│   │   │   └── utils.ts
-│   │   ├── pages/
-│   │   │   └── Home.tsx
-│   │   ├── App.tsx
-│   │   ├── index.css
-│   │   └── main.tsx
-│   └── index.html
-├── patches/
-│   └── wouter@3.7.1.patch
-├── DEMO.md
-├── README.md
-├── package-lock.json
-├── package.json
-├── tsconfig.json
-├── tsconfig.node.json
-└── vite.config.ts
-```
+**One-line statement:**
+> No cryptographic way exists to prove an environmental claim wasn't altered after publication, or to resolve two organizations disagreeing on the same number.
 
-The `backend/data/` directory is created automatically when the demo starts. It contains runtime SQLite databases and signing-key material and is intentionally not included in the ZIP. `node_modules/` and `dist/` are also generated locally and are not included.
+**🎯 Real-world spark:** DigiNotar (2011) — fake certs went undetected for weeks. Certificate Transparency (2013) fixed that for the web. Environmental claims have no equivalent.
 
-## Requirements
+**👥 Who's affected:**
+-  Sustainability/ESG teams — no evidence trail
+-  Auditors — can't verify who submitted what, or if it changed
+-  Regulators, investors, public — only have "trust us"
 
-Install **Node.js 22 or newer** and npm. The project uses npm scripts and `package-lock.json` for reproducible installation.
+**❌ Why existing fixes fall short:**
 
-## Run in VS Code
+| Approach | Gap |
+|---|---|
+| 🔐 Certificate Transparency | Built for certs, no org identity or conflict handling |
+| 🌱 Climate Action Data Trust | Stops double-spent credits, not edited claims |
+| 📚 Academic provenance research | Right idea, wrong domain (HPC, not ESG) |
+| ⚙️ Blockchain-for-ESG proposals | Mostly whitepapers; heavy when built |
 
-Open the extracted `EcoProof-final` folder in VS Code, open its integrated terminal, and run these commands from the project root:
+**✅ Our solution:** Sign every claim → chain versions → verify independently across nodes → flag conflicts instead of silently overwriting.
+
+**What EcoProof proves:** ✔️ the record wasn't silently altered after signing, and ✔️ which registered key signed it.
+**What it does NOT prove:** ❌ that the underlying measurement is scientifically true.
+
+---
+
+## 🏗️ Architecture / Workflow
+
+Four problems solved together:
+
+1.  **Bind** — claim linked to evidence via hash
+2.  **Version** — nothing overwritten; every edit = new version
+3.  **Verify independently** — 3 replica nodes cross-check, no single trusted party
+4.  **Flag conflicts** — disagreement surfaced, never auto-resolved
+
+**Verification steps:**
+1. Recompute hash of canonical record
+2. Check signature against registered public key
+3. Check previous-record link (chain integrity)
+4. Check conflict rules, freshness, authorization
+5. Compare replica responses → agree / disagree / stale / unavailable
+
+**⚠️ On the 3-node design:** Detects a lone outlier *if* 2 of 3 agree and only 1 is faulty. **Not** full Byzantine Fault Tolerance (which needs 3f+1 replicas). Can't resolve two colluding nodes or 3-way disagreement.
+
+**🪪 Identity:** Orgs attest identity once → gated approval before they can anchor claims. Anchoring blocked until approved.
+
+---
+
+## 🔐 Core Technical Mechanism
+
+| Mechanism | What it does |
+|---|---|
+| 🔢 **SHA-256** (FIPS 180-4) | Hashes evidence → fixed 256-bit fingerprint. Change 1 byte → hash breaks. |
+| ✍️ **ECDSA P-256** (FIPS 186-5) | Signs the hash with org's private key → proves *who* vouched for it. |
+| ⛓️ **Hash-chaining** | Each record links to previous record's hash → edits break the chain visibly. |
+| 📐 **Canonicalization** | Data converted to one exact byte format before hashing, so equivalent data always hashes the same. |
+| 🆚 **Typed conflict rules** | Numbers → % variance threshold. Categories → exact match. Mismatched units → "incomparable," never force-compared. |
+| 📦 **Off-chain evidence** | Large/sensitive data stored off-chain (content-addressed); only proofs kept on-record. |
+
+> **Correction note:** FIPS 186-4 was withdrawn Feb 2024 → superseded by **FIPS 186-5**. C2PA's current spec is **v2.4**.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+|---|---|
+| ⚙️ Runtime | Node.js 22+ |
+| 🔌 Backend | Express.js |
+| 🗄️ Database | SQLite (`node:sqlite`) — per-node local storage |
+| 🔐 Crypto | Node.js `crypto` (OpenSSL) |
+| ✍️ Signatures | ECDSA P-256 (FIPS 186-5) |
+| 🔢 Hashing | SHA-256 (FIPS 180-4) |
+| 🎨 Frontend | React 19 + TypeScript |
+| ⚡ Build | Vite |
+| 🎨 Styling | Tailwind CSS 4 |
+| 📊 Charts | Recharts |
+| ✨ Animation | Framer Motion |
+| 🔣 Icons | Lucide React |
+
+**Why:** Node.js → built-in crypto/SQLite, no extra deps · SQLite → zero-config, isolated per node · ECDSA P-256 → NIST standard (Signal, SSH, TLS), lighter than RSA · SHA-256 → industry standard, hardware-accelerated
+
+---
+
+## ⚙️ Setup & Installation
+
+**Prerequisites:** 🟢 Node.js 22+ · 📦 npm · 🔧 Git
 
 ```bash
+git clone https://github.com/Korinex/CF26-ES01-Nexus.git
+cd CF26-ES01-Nexus
 npm install
-npm run demo
+npm run demo   # starts 3 backend nodes + frontend
 ```
 
-The demo starts the frontend at `http://localhost:5173` and three independent backend nodes at `http://localhost:4000`, `http://localhost:4001`, and `http://localhost:4002`. Stop all processes with `Ctrl+C`.
-
-For normal development, use:
-
-```bash
-npm run dev
-```
-
-This starts one backend development process and the Vite frontend. For a production build, use:
-
-```bash
-npm run build
-npm run start
-```
-
-## Recommended judge walkthrough
-
-Open the dashboard and click **Run judge proof**. This runs a fresh live journey: a pending organization is created, its identity is attested by the verifier authority, the approved identity is replicated to the other nodes, a baseline and correction are signed and anchored, a typed numeric conflict is created and resolved without deleting either version, and all three independent nodes answer a signed verification challenge.
-
-The flow opens **Proof inspector**, which shows the live payload, approved signer, hash, previous-chain link, signature status, complete version history, and independent responses from each node. This is the fastest way to demonstrate the complete product claim.
-
-To demonstrate tamper detection, open **Evidence lineage**, select a record, and use **Change payload byte**. The recomputed proof fails. Use **Restore original payload** to restore the durable original payload and verify the chain again.
-
-To demonstrate the network, open **Network verify**. Show the three different ports, separate record counts, and matching chain heads. If needed, stop a peer to show that the verifier reports disagreement instead of hiding an unavailable node.
-
-## Commands
+**Ports:** Node 1 → `:4000` · Node 2 → `:4001` · Node 3 → `:4002` · Frontend → `:5173`
 
 | Command | Purpose |
 |---|---|
-| `npm install` | Install dependencies and create `package-lock.json` locally |
-| `npm run demo` | Start three backend nodes and the frontend for the full demonstration |
-| `npm run judge-demo` | Run the live judge journey from a second terminal while the demo is running |
-| `npm run dev` | Start one backend development process and the Vite frontend |
-| `npm run check` | Run the TypeScript check |
-| `npm run build` | Build the frontend and bundled backend |
-| `npm run start` | Start the bundled production backend and static frontend |
-| `node backend/scripts/smoke-test.mjs` | Run the live integration test against three running nodes |
+| `npm run dev` | 1 node + frontend (dev mode) |
+| `npm run build` | Production build |
+| `npm run start` | Start production server |
+| `npm run check` | TypeScript type check |
+| `npm run judge-demo` | Terminal walkthrough |
+| `npm run format` | Format code with Prettier |
 
-## Live frontend/backend boundary
+---
 
-The React UI uses `frontend/src/lib/ecoproof-api.ts` for HTTP transport and stable route contracts. It does not access SQLite, signing keys, or node internals. A future frontend can therefore replace the contents of `frontend/src/` while retaining the backend API and verification model.
+## ▶️ Usage
 
-## E-01 implementation
+**🎯 Judge Demo:** Open `localhost:5173` → click **"Run judge proof"** → auto-runs: org created → identity attested → baseline claim anchored (42.0 tCO2e) → correction anchored (46.0 tCO2e) → conflict flagged → network verified
 
-**Independent verification** uses three separate Node processes, separate ports, separate SQLite files, and separate node signing keys. `/api/verify-network` sends a challenge over HTTP to every configured peer, verifies every returned proof signature, and compares chain length, head hash, and chain validity.
+**🔨 Tamper Test:** Evidence lineage → select record → **"Change payload byte"** (verification fails) → **"Restore original payload"** (passes again)
 
-**Typed conflict variance** compares numeric evidence using symmetric percentage difference and categorical evidence using normalized equality. Incomparable numeric values are explicitly marked incomparable rather than silently assigned a universal mismatch value.
+**🖥️ Network Test:** Network verify → **"Stop node-2"** (agreement drops 2/3) → restart + **"Sync peers"** (back to 3/3)
 
-**Verifiable organization identity** starts as pending. The attestation endpoint persists the attester, role, statement, timestamp, hash, and authority signature, replicates the approval, and prevents anchoring until the organization is approved.
+**📊 Benchmarks:** Measured experiments → **"Run measurements"** → view scaling (10/100/1000 records) + baseline comparison (0% vs 100%)
 
-**Persistent version history** keeps every signed evidence record as an immutable database row. Conflict resolution stores the selected version and resolution metadata without deleting the original or the correction. The version endpoint returns the complete history.
+**💻 Terminal:** `npm run judge-demo`
 
-**Scoped prevention statement:** EcoProof does not claim to prevent arbitrary edits to external files. Once bytes are anchored, signed, chained, and replicated, undetected tampering of those anchored records becomes cryptographically infeasible under the verifier model.
+**🔌 Key API Endpoints**
 
-## API routes used by the frontend
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/organizations` | Register org |
+| POST | `/api/organizations/:id/attest` | Approve org |
+| POST | `/api/evidence` | Anchor claim |
+| GET | `/api/evidence/:id/versions` | Version history |
+| POST | `/api/evidence/:id/tamper` \| `/untamper` | Tamper / restore demo |
+| GET | `/api/network/status` | Node statuses |
+| GET | `/api/verify-network` | Challenge all nodes |
+| GET | `/api/conflicts` \| POST `/:id/resolve` | View / resolve conflicts |
+| GET | `/api/experiment/benchmark` | Run benchmark |
 
-| Route | Purpose |
+---
+
+## 📊 Validation & Results
+
+| Experiment | Result |
 |---|---|
-| `GET /api/health` | Live node state and chain summary |
-| `GET /api/stats` | Dashboard metrics |
-| `GET /api/catalog` | Backend-owned evidence types and comparison semantics |
-| `GET /api/organizations` | Registered identities and attestation state |
-| `POST /api/organizations` | Register a pending organization |
-| `POST /api/organizations/:id/attest` | Persist and replicate identity attestation |
-| `GET /api/evidence` | Signed records with recomputed verification |
-| `POST /api/evidence` | Anchor approved evidence |
-| `GET /api/evidence/:id/versions` | Query all versions for a claim |
-| `POST /api/evidence/:id/tamper` | Demonstration-only payload mutation |
-| `POST /api/evidence/:id/untamper` | Restore the durable original payload |
-| `GET /api/conflicts` | Typed conflict queue |
-| `POST /api/conflicts/:id/resolve` | Resolve while preserving both versions |
-| `GET /api/network/status` | Independent node status |
-| `GET /api/verify-network` | Challenge and aggregate node proofs |
-| `POST /api/judge-demo` | Run the complete live judge walkthrough |
->>>>>>> Stashed changes
+| 🧪 Verification scaling | 10/100/1,000 records → ~2ms/~15ms/~150ms, **100% detection**, scales linearly (~0.15ms/record) |
+| 🧪 Tamper detection | 100/1,000 records tampered (10%) → **100% detected** |
+| 🧪 Baseline comparison | Naive storage → **0%** detection · EcoProof (SHA-256+ECDSA) → **100%** |
+| 🧪 Node sync | 100 records synced in ~200ms (~500 records/sec, ~1ms verify each) |
+| 🧪 Network agreement | 3/3 online → AGREE · 1 offline → 2/3 · recovers → back to 3/3 |
+
+> ⚠️ Benchmarks use freshly generated test chains, not real submitted data — validates implementation, not real-world truth.
+
+---
+
+## ⚠️ Limitations & Future Scope
+
+**Assumptions (stated boundaries, not oversights):**
+-  Orgs honest *at registration*, not forever after
+-  Verifier nodes assumed uncompromised
+-  Typed rules cover common cases, not every format
+-  Orgs responsible for securing their own key
+
+**Known limits:**
+-  Not full BFT — can't catch 2 colluding nodes or 3-way disagreement
+-  Doesn't prove truth — a legit org can still sign false data
+-  Key compromise unaddressed at prototype stage (keys stored in PEM files)
+-  Can't fully prove deletion of unseen records
+-  Can't prove *every* measurement was submitted (no completeness guarantee)
+
+**🚀 Future roadmap:**
+- 🔐 Hardware Security Module (HSM) for key storage, rotation, revocation
+- 🌐 HTTPS/TLS across all services
+- 🖥️ Independently deployed nodes (separate operators)
+- 🧾 External checkpoints for deletion resistance
+- 🔗 Interop with W3C Verifiable Credentials / C2PA
+- 🧬 Post-quantum signature migration planning
+
+---
+
+## 🌍 Stakeholders
+
+| Category | Examples |
+|---|---|
+| 🏢 Publishers | ESG/sustainability teams |
+| 🕵️ Verifiers | Auditors, assurance firms |
+| 🤝 Evidence sources | Data providers, third-party labs |
+| 🖥️ Infra operators | Verifier node operators |
+| 🏛️ Regulators | Environmental/financial disclosure bodies |
+| 💰 Capital | Investors, ESG rating agencies |
+| 📰 Oversight | Journalists, watchdog orgs |
+| 🌎 End beneficiaries | General public |
+
+---
+
+## 👥 Team
+
+**Team Name: NEXUS**
+
+1. Shifa Shehbaz Akbani
+2. Khudaija Harmain
+3. Jeeya Chavan
+4. Khushi Jaiswal
+
+---
+
+## 🤖 AI Assistance Disclosure
+
+AI tools were used to support the team's workflow throughout this project — including research, technical documentation, architectural articulation, and presentation design. The team directed all problem framing and design decisions, using these tools to help structure, refine, and verify the resulting material.
+
+- **Claude (Anthropic)** — Technical documentation, drafting, and reference/standards verification
+- **Google AI Studio** — Prototyping support
+- **Manus** — Research and task organization
+- **Canva (AI features)** — Visual and presentation design
+
+All final technical decisions and content were reviewed and approved by the team.
+
+
+---
+
+
+---
+
+## 📚 References
+
+1. Nakamoto (2008) — Bitcoin whitepaper
+2. Merkle (1988) — Digital Signature Based on a Conventional Encryption Function
+3. Haber & Stornetta (1991) — How to Time-Stamp a Digital Document
+4. [RFC 6962 — Certificate Transparency](https://www.rfc-editor.org/rfc/rfc6962)
+5. [W3C Verifiable Credentials Data Model v2.0](https://www.w3.org/TR/vc-data-model-2.0/)
+6. [NIST — Digital Signature glossary](https://csrc.nist.gov/glossary/term/digital_signature)
+7. [NIST FIPS 186-5](https://doi.org/10.6028/NIST.FIPS.186-5)
+8. [USENIX — Beyond One-Third Faulty Replicas in BFT Systems](https://www.usenix.org/conference/nsdi-07/beyond-one-third-faulty-replicas-byzantine-fault-tolerant-systems)
+9. [C2PA Technical Spec v2.4](https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html)
+10. [Git Documentation](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository)
+11. [IPFS Docs — Content Identifiers](https://docs.ipfs.tech/concepts/content-addressing/)
+12. [PostgreSQL Documentation](https://www.postgresql.org/docs/current/index.html)
+13. [SQLite Documentation](https://sqlite.org/docs.html)
