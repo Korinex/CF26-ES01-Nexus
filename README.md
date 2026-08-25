@@ -3,7 +3,7 @@
 
 ## 🔍 The Problem
 
-Every year, companies publish thousands of environmental claims — carbon emissions cut by 20%, renewable energy sourced at 80%, sustainability targets hit ahead of schedule. These numbers move from spreadsheets to consultants to sustainability reports to public disclosures, passing through many hands along the way.
+Every year, companies publish thousands of environmental claims like carbon emissions cut by 20%, renewable energy sourced at 80%, sustainability targets hit ahead of schedule. These numbers move from spreadsheets to consultants to sustainability reports to public disclosures, passing through many hands along the way.
 
 By the time a claim reaches a regulator, an investor, or the public, three simple questions become surprisingly hard to answer:
 
@@ -15,9 +15,9 @@ Right now, the honest answer to all three is: **you have to trust the organizati
 
 ## 🧠 What We Learned Looking at How Others Solved This
 
-🔐 **Certificate Transparency.** A compromised Certificate Authority once secretly issued fraudulent certificates for major domains including Google and Yahoo, and because there was no centralized monitoring system, the breach went undetected for weeks [1]. The industry's fix, in place since 2013: certificates are logged in public, append-only, cryptographically-assured ledgers built on Merkle trees, making it cryptographically impossible to remove or alter a logged entry without detection [2]. Importantly, the system's own documentation is explicit that it cannot prevent a bad certificate from being issued — it only makes misissuance detectable quickly once it happens [3].
+🔐 **Certificate Transparency.** A compromised Certificate Authority once secretly issued fraudulent certificates for major domains including Google and Yahoo, and because there was no centralized monitoring system, the breach went undetected for weeks [1]. The industry's fix, in place since 2013: certificates are logged in public, append-only, cryptographically-assured ledgers built on Merkle trees, making it cryptographically impossible to remove or alter a logged entry without detection [2]. Importantly, the system's own documentation is explicit that it cannot prevent a bad certificate from being issued , it only makes misissuance detectable quickly once it happens [3].
 
-🌱 **Blockchain-based carbon accounting.** The Climate Action Data Trust — a permissioned ledger launched by the World Bank, the International Emissions Trading Association, and the Government of Singapore — assigns unique identifiers to carbon credits so there is only ever one authoritative record of a credit's status, preventing double-counting across registries [4]. Industry analysis of blockchain applications in ESG reporting is candid about the same boundary we found in Certificate Transparency: the technology preserves an audit trail once data is recorded, but it does not guarantee the underlying measurement was accurate to begin with [5].
+🌱 **Blockchain-based carbon accounting.** The Climate Action Data Trust — a permissioned ledger launched by the World Bank, the International Emissions Trading Association, and the Government of Singapore , assigns unique identifiers to carbon credits so there is only ever one authoritative record of a credit's status, preventing double-counting across registries [4]. Industry analysis of blockchain applications in ESG reporting is candid about the same boundary we found in Certificate Transparency: the technology preserves an audit trail once data is recorded, but it does not guarantee the underlying measurement was accurate to begin with [5].
 
 📚 **Academic provenance research.** Existing work on data provenance systems notes that most solutions focus on reducing performance overhead and improving query flexibility, while giving little attention to whether the provenance record itself could be fabricated or falsified [6].
 
@@ -38,11 +38,11 @@ Right now, the honest answer to all three is: **you have to trust the organizati
 
 ## 🌟 Why It Matters
 
-If this claim holds, accountability shifts from "trust our word" to "here is math you can independently verify" — a modest, provable foundation for audits and regulators to build on.
+If this claim holds, accountability shifts from "trust our word" to "here is math you can independently verify" , a modest, provable foundation for audits and regulators to build on.
 
 ---
 
-## Your Reference List (paste at the end of your report)
+## Reference List 
 
 1. Certificate Transparency Logs: Complete Analysis for Security Professionals — subdomains.dbuidl.com
 2. What is Certificate Transparency? — SSL Insights, sslinsights.com
