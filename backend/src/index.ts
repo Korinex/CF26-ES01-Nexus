@@ -239,6 +239,7 @@ addColumn("ALTER TABLE conflicts ADD COLUMN resolution_record_id TEXT");
 addColumn("ALTER TABLE conflicts ADD COLUMN resolution_note TEXT");
 addColumn("ALTER TABLE conflicts ADD COLUMN resolved_at TEXT");
 
+
 function privateKeyPath(orgId: string) {
   return path.join(KEYS_DIR, `${orgId}.private.pem`);
 }
@@ -378,6 +379,8 @@ function logActivity(kind: string, actor: string, target: string | null, result:
   ).run(id(), kind, actor, target, result, details, now());
 }
 
+
+
 const NUMERIC_TYPES = new Set(["emissions", "carbon_accounting", "assessment", "scientific_dataset"]);
 type Comparison = { mode: "numeric" | "categorical" | "incomparable"; comparable: boolean; matches: boolean; variancePercent: number | null; explanation: string; left: Record<string, unknown>; right: Record<string, unknown> };
 function parseMeasurement(payload: string) {
@@ -418,6 +421,8 @@ function ensureConflict(record: StoredRecord) {
   logActivity("conflict_opened", NODE_ID, conflictId, "created", comparison.explanation);
   return conflictId;
 }
+
+
 
 function insertVerifiedRecord(record: StoredRecord, source: "local" | "peer") {
   const existing = one("SELECT * FROM evidence_records WHERE id = ?", record.id as string);
@@ -945,6 +950,7 @@ async function startServer() {
     });
     const organization = { id: id(), name, publicKeyPem: keys.publicKey, createdAt: now() };
     try {
+      await syncWithPeers();
       db.prepare("INSERT INTO organizations (id, name, public_key_pem, created_at) VALUES (?, ?, ?, ?)").run(organization.id, name, keys.publicKey, organization.createdAt);
       savePrivateKey(organization.id, keys.privateKey);
       const replication = await Promise.all(PEERS.map(async url => {

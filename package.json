@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "concurrently -k \"npm run backend:dev\" \"npm run frontend:dev\"",
     "demo": "tsx backend/scripts/demo.ts",
+    "restart:node": "node backend/scripts/restart-node.mjs",
     "judge-demo": "node backend/scripts/judge-demo.mjs",
     "backend:dev": "tsx backend/src/index.ts",
     "frontend:dev": "vite --host",
