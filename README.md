@@ -230,35 +230,26 @@ npm run demo   # starts 3 backend nodes + frontend
 
 ---
 
-## 🤖 AI Assistance Disclosure
-
+## 🤖 AI Assistance Disclosure 
 AI tools were used to support the team's workflow throughout this project — including research, technical documentation, architectural articulation, and presentation design. The team directed all problem framing and design decisions, using these tools to help structure, refine, and verify the resulting material.
 
-- **Claude (Anthropic)** — Technical documentation, drafting, and reference/standards verification
-- **Google AI Studio** — Prototyping support
-- **Manus** — Research and task organization
-- **Canva (AI features)** — Visual and presentation design
-
+**Claude (Anthropic)** — Technical documentation, drafting, and reference/standards verification
+**Google AI Studio** — Prototyping support
+**Manus** — Research and task organization
+**Canva (AI features)** — Visual and presentation design
 All final technical decisions and content were reviewed and approved by the team.
 
-
----
-
-
----
-
 ## 📚 References
-
-1. Nakamoto (2008) — Bitcoin whitepaper
-2. Merkle (1988) — Digital Signature Based on a Conventional Encryption Function
-3. Haber & Stornetta (1991) — How to Time-Stamp a Digital Document
-4. [RFC 6962 — Certificate Transparency](https://www.rfc-editor.org/rfc/rfc6962)
-5. [W3C Verifiable Credentials Data Model v2.0](https://www.w3.org/TR/vc-data-model-2.0/)
-6. [NIST — Digital Signature glossary](https://csrc.nist.gov/glossary/term/digital_signature)
-7. [NIST FIPS 186-5](https://doi.org/10.6028/NIST.FIPS.186-5)
-8. [USENIX — Beyond One-Third Faulty Replicas in BFT Systems](https://www.usenix.org/conference/nsdi-07/beyond-one-third-faulty-replicas-byzantine-fault-tolerant-systems)
-9. [C2PA Technical Spec v2.4](https://spec.c2pa.org/specifications/specifications/2.4/specs/C2PA_Specification.html)
-10. [Git Documentation](https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository)
-11. [IPFS Docs — Content Identifiers](https://docs.ipfs.tech/concepts/content-addressing/)
-12. [PostgreSQL Documentation](https://www.postgresql.org/docs/current/index.html)
-13. [SQLite Documentation](https://sqlite.org/docs.html)
+Nakamoto (2008) — Bitcoin whitepaper
+Merkle (1988) — Digital Signature Based on a Conventional Encryption Function
+Haber & Stornetta (1991) — How to Time-Stamp a Digital Document
+RFC 6962 — Certificate Transparency
+W3C Verifiable Credentials Data Model v2.0
+NIST — Digital Signature glossary
+NIST FIPS 186-5
+USENIX — Beyond One-Third Faulty Replicas in BFT Systems
+C2PA Technical Spec v2.4
+Git Documentation
+IPFS Docs — Content Identifiers
+PostgreSQL Documentation
+SQLite Documentation
